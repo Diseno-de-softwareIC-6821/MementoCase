@@ -21,7 +21,7 @@ public class SylesCaretaker {
     }
     public StyleMemento getPrevious(){
         int newIndex = currentIndex-1;                      
-        if(newIndex  <= -1 || newIndex >= listMementos.size()-1){               
+        if(newIndex  <= -1 ){               
             return null;           
         }
         currentIndex= newIndex;           
@@ -35,10 +35,23 @@ public class SylesCaretaker {
         currentIndex = newIndex;           
         return listMementos.get(currentIndex);   
     }
+    public boolean hasNext(){
+        return currentIndex +1 <= listMementos.size()-1;
+    }
+    public boolean havePrevious(){
+        return currentIndex-1 >=0;
+    }
+    
+    
     public void add(StyleMemento style){
         listMementos.add(style);
+        if(listMementos.size()>20){
+            listMementos.remove(0);
+        }
+        currentIndex++;
     }
     public StyleMemento getCurrent(){
+        
         return listMementos.get(currentIndex);
     }
     

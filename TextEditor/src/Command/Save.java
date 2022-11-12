@@ -5,6 +5,7 @@
 package Command;
 
 import FilesType.AFile;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,6 +26,7 @@ public class Save implements ICommand{
            fileToSave.save();
            return true;
        }
+        
        return false;
     }
 

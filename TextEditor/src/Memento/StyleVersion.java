@@ -4,7 +4,8 @@
  */
 package Memento;
 
-import java.text.NumberFormat.Style;
+
+import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;
 
 /**
@@ -16,6 +17,11 @@ public class StyleVersion implements Cloneable{
     private Style style;
     private String text;
     private int cursorPos;
+
+    public StyleVersion() {}
+    
+    
+    
     
     public StyleMemento save(){
         try {               
@@ -26,7 +32,45 @@ public class StyleVersion implements Cloneable{
     }
     
     public void restore(StyleMemento memento){
-    
+        StyleVersion styleVersion=  memento.getStyle();
+        doc = styleVersion.getDoc();
+        style = styleVersion.getStyle();
+        text = styleVersion.getText();
+        
     }
+    
+
+    public void setDoc(StyledDocument doc) {
+        this.doc = doc;
+    }
+
+    public void setStyle(Style style) {
+        this.style = style;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setCursorPos(int cursorPos) {
+        this.cursorPos = cursorPos;
+    }
+
+    public StyledDocument getDoc() {
+        return doc;
+    }
+
+    public Style getStyle() {
+        return style;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public int getCursorPos() {
+        return cursorPos;
+    }
+    
     
 }

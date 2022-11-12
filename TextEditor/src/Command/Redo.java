@@ -4,18 +4,34 @@
  */
 package Command;
 
+import GUI.Editor;
+import Memento.StyleMemento;
+import Memento.SylesCaretaker;
+
 /**
  *
  * @author Esteb
  */
 public class Redo implements ICommand{
+    private Editor editor;
 
-    public Redo() {
+    public Redo(Editor editor) {
+        this.editor = editor;
     }
+    
     
     @Override
     public boolean execute() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SylesCaretaker caretaker = editor.getCaretaker();
+        StyleMemento memento = caretaker.getNext();
+        if(memento!=null){
+            editor.getStyleversion().restore(memento);     
+            return true;
+        }
+        editor.getjButtonUndo().setEnabled(caretaker.havePrevious());
+        editor.getjButtonRedo().setEnabled(caretaker.hasNext());
+
+        return false;
     }
     
 }

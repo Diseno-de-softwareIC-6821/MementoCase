@@ -4,20 +4,38 @@
  */
 package Command;
 
+import GUI.Editor;
+import Memento.StyleMemento;
+import Memento.SylesCaretaker;
+
 /**
  *
  * @author Esteb
  */
 public class Undo implements ICommand{
+    private  Editor editor;
 
-    public Undo() {
+    public Undo(Editor editor) {
+        this.editor = editor;
     }
+    
+    
     
     
     
     @Override
     public boolean execute() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SylesCaretaker caretaker = editor.getCaretaker();
+        StyleMemento memento = caretaker.getPrevious();
+        if(memento!=null){
+            editor.getStyleversion().restore(memento);
+            editor.getjTextPane().setDocument(editor.getStyleversion().getDoc());
+            editor.getjTextPane().updateUI();
+            return true;
+        }
+        editor.getjButtonRedo().setEnabled(caretaker.hasNext());
+        editor.getjButtonUndo().setEnabled(caretaker.havePrevious());
+        return false;
     }
     
 }

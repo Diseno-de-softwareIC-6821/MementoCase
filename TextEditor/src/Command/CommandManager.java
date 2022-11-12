@@ -12,7 +12,8 @@ import java.util.HashMap;
  */
 public class CommandManager {
     private HashMap<Commands, ICommand> commandsList; 
-
+    
+    
     public CommandManager() {
         this.commandsList = new HashMap<>();
     }
