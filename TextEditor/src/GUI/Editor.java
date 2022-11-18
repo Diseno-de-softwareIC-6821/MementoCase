@@ -29,6 +29,9 @@ import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import Memento.SylesCaretaker;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import javax.swing.JOptionPane;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -66,8 +69,8 @@ public class Editor extends javax.swing.JFrame {
         commandManager = new CommandManager();
         commandManager.registCommand(Commands.UNDO, new Undo(this));
         commandManager.registCommand(Commands.REDO, new Redo(this));
-        commandManager.registCommand(Commands.SAVE, new Save());
-        commandManager.registCommand(Commands.SAVE_AS, new SaveAs());
+        commandManager.registCommand(Commands.SAVE, new Save(this));
+        commandManager.registCommand(Commands.SAVE_AS, new SaveAs(this));
         commandManager.registCommand(Commands.OPEN, new Open(this));
         commandManager.registCommand(Commands.CHANGE_THEME, new ChangeColorTheme(this));
         commandManager.registCommand(Commands.CHANGE_FOREGROUND, new ChangeForeground(this));
@@ -99,6 +102,7 @@ public class Editor extends javax.swing.JFrame {
         button.setIcon(icon);
         button.repaint();
     }
+    
     
 
     /**
@@ -148,12 +152,23 @@ public class Editor extends javax.swing.JFrame {
             }
         });
         jToolBar.add(jButtonOpen);
+
+        jTextFieldName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldNameActionPerformed(evt);
+            }
+        });
         jToolBar.add(jTextFieldName);
 
         jButtonSave.setText("Save");
         jButtonSave.setFocusable(false);
         jButtonSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSaveActionPerformed(evt);
+            }
+        });
         jToolBar.add(jButtonSave);
         jToolBar.add(jSeparator1);
 
@@ -300,6 +315,17 @@ public class Editor extends javax.swing.JFrame {
     private void jButtonRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRedoActionPerformed
        commandManager.getCommand(Commands.REDO).execute();
     }//GEN-LAST:event_jButtonRedoActionPerformed
+
+    private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
+        if (commandManager.getCommand(Commands.SAVE).execute())
+            JOptionPane.showMessageDialog(null, "Archivo guardado exitosamente");  
+        else
+            JOptionPane.showMessageDialog(null, "El archivo no fue guardado");
+    }//GEN-LAST:event_jButtonSaveActionPerformed
+
+    private void jTextFieldNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldNameActionPerformed
 
     /**
      * @param args the command line arguments

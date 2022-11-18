@@ -4,13 +4,18 @@
  */
 package Command;
 
+import GUI.Editor;
+
 /**
  *
  * @author Esteb
  */
 public class SaveAs implements ICommand{
+    
+    private Editor editor;
 
-    public SaveAs() {
+    public SaveAs(Editor editor) {
+        this.editor = editor;
     }
 
     
