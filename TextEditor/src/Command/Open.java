@@ -37,8 +37,9 @@ public class Open implements ICommand{
             //méFile fichero = fc.getSelectedFile();todo para leer el archivo y mostrarlo en el textArea
             File fichero = fc.getSelectedFile(); 
             String ruta = fichero.getAbsolutePath();
-            EditableVersion.getInstance().setEditable((Editable) FileFactory.create(FileType.EDITABLE));
+    
             EditableVersion.getInstance().getFile().setRoute(ruta);
+
             System.out.println("La ruta del archivo seleccionado ha sido obtenida exitosamente");
             try(FileReader fr = new FileReader(fichero)){
                 String cadena = "";

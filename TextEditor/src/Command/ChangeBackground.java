@@ -32,7 +32,7 @@ public class ChangeBackground implements ICommand{
             editable.setText(pane.getText()); //to save text
             editor.getCaretaker().add(EditableVersion.getInstance().record()); //
             Color color = JColorChooser.showDialog(editor, "Select background for text", Color.white);
-            System.out.println(color.getAlpha());
+            //System.out.println(color.());
             StyleConstants.setBackground(editable.getStyle(), 
                    color
             );
