@@ -41,15 +41,17 @@ public class Open implements ICommand{
             EditableVersion.getInstance().getFile().setRoute(ruta);
 
             System.out.println("La ruta del archivo seleccionado ha sido obtenida exitosamente");
+     
             try(FileReader fr = new FileReader(fichero)){
-                String cadena = "";
-                int valor = fr.read();
-                while(valor != -1){
-                    cadena = cadena + (char)valor;
-                    valor = fr.read();
-                }
-               this.editor.getjTextFieldName().setText(ruta);
-               this.editor.getjTextPane().setText(cadena);
+                Editable.FormatParser format = new Editable.FormatParser(fr);
+                format.parse();
+                EditableVersion.getInstance().getEditable().setText(format.getCleanStr());
+                EditableVersion.getInstance().getEditable().parseFormat(format.getFormats());
+                EditableVersion.getInstance().getFile().setText(format.getCleanStr());
+                this.editor.getjTextPane().setText(format.getCleanStr());
+                this.editor.getjTextPane().setDocument(EditableVersion.getInstance().getEditable().getDoc());
+                this.editor.getjTextFieldName().setText(ruta);
+                
                 return true;
             }catch(IOException ex){
                 System.out.println("Error al leer el archivo");

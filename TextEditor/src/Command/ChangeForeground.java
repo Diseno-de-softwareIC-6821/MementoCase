@@ -31,13 +31,9 @@ public class ChangeForeground implements ICommand{
             Editable editable = EditableVersion.getInstance().getEditable();  //get editable abtract file
             editable.setText(pane.getText()); //to save text
             editor.getCaretaker().add(EditableVersion.getInstance().record()); //record the currect features including text
-            
-            StyleConstants.setForeground(editable.getStyle(), 
-                    JColorChooser.showDialog(editor, "Select color", Color.BLACK) //select color
-            );
-           
-            editable.getDoc().setCharacterAttributes(pane.getSelectionStart(), 
-                    pane.getSelectionEnd()-pane.getSelectionStart(),EditableVersion.getInstance().getEditable().getStyle(), true);
+            Color color = JColorChooser.showDialog(editor, "Select color", Color.BLACK); //select color
+            editable.setColorForeground(pane.getSelectionStart(),pane.getSelectionEnd() , color);
+    
             editor.getjButtonUndo().setEnabled(true); //paint colors 
             return true;
         }catch (Exception ex){}

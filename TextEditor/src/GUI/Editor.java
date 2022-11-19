@@ -334,7 +334,7 @@ public class Editor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonRedoActionPerformed
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
-        EditableVersion.getInstance().getEditable().setText(jTextPane.getText());
+        //EditableVersion.getInstance().getEditable().setText(jTextPane.getText());
         String route = EditableVersion.getInstance().getFile().getRoute();
         if(!route.isBlank()){
             Save command = (Save)commandManager.getCommand(Commands.SAVE);
@@ -355,7 +355,7 @@ public class Editor extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldNameActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        EditableVersion.getInstance().getEditable().setText(jTextPane.getText());
+        //EditableVersion.getInstance().getEditable().setText(jTextPane.getText());
 
         if(commandManager.getCommand(Commands.SAVE_AS).execute()){        
             JOptionPane.showMessageDialog(null, "Archivo guardado exitosamente");  

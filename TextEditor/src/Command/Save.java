@@ -36,6 +36,7 @@ public class Save implements ICommand{
             fileToSave.setText(EditableVersion.getInstance().getEditable().getText());
            //String finalPath= fileToSave.getRoute()+fileToSave.getExtension(); 
            String finalPath= fileToSave.getRoute();
+           System.out.println("Text to save: "+fileToSave.getText());
            System.out.println("Final path to save "+finalPath);
            try {
                 File file = new File(finalPath);
