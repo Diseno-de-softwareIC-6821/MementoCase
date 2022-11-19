@@ -82,6 +82,7 @@ public class Editor extends javax.swing.JFrame {
         this.jButtonRedo.setEnabled(false);
     }
     
+    
   
 
    

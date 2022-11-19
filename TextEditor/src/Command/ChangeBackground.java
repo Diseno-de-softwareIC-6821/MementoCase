@@ -36,7 +36,7 @@ public class ChangeBackground implements ICommand{
                     JColorChooser.showDialog(editor, "Select color", Color.white)
             );
             editable.getDoc().setCharacterAttributes(pane.getSelectionStart(), 
-                    pane.getSelectionEnd()- pane.getSelectionStart(),pane.getStyle("newstyle"), true);
+                    pane.getSelectionEnd()- pane.getSelectionStart(),EditableVersion.getInstance().getEditable().getStyle(), true);
             
             editor.getjButtonUndo().setEnabled(editor.getCaretaker().havePrevious());
             return true;

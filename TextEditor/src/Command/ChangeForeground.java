@@ -37,7 +37,7 @@ public class ChangeForeground implements ICommand{
             );
            
             editable.getDoc().setCharacterAttributes(pane.getSelectionStart(), 
-                    pane.getSelectionEnd()-pane.getSelectionStart(),pane.getStyle(editable.getStyleName()), true);
+                    pane.getSelectionEnd()-pane.getSelectionStart(),EditableVersion.getInstance().getEditable().getStyle(), true);
             editor.getjButtonUndo().setEnabled(true); //paint colors 
             return true;
         }catch (Exception ex){}

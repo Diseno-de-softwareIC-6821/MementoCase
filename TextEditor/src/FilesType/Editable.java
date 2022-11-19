@@ -18,7 +18,7 @@ public class Editable extends AFile implements Serializable{
     private StyledDocument doc; 
     private Style style;
     private int cursorPos;
-
+    
     
     public Editable(FileType type, String extension, String description){
         super(type, extension, description);
@@ -50,6 +50,9 @@ public class Editable extends AFile implements Serializable{
     public String getStyleName() {
         return styleName;
     }
+    
+    
+    
     
     
     
