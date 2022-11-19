@@ -9,15 +9,17 @@ package Memento;
  * @author Esteb
  */
 public class StyleMemento {
-    private StyleVersion style;
+    private EditableVersion editable;
 
-    public StyleMemento(StyleVersion style) {
-        this.style = style;
+    public StyleMemento(EditableVersion style) {
+        this.editable = style;
     }
 
-    public StyleVersion getStyle() {
-        return style;
+    public EditableVersion getEditable() {
+        return editable;
     }
+
+    
     
     
 }

@@ -4,10 +4,10 @@
  */
 package Command;
 
+import FilesType.Editable;
 import GUI.Editor;
-import Memento.StyleVersion;
+import Memento.EditableVersion;
 import java.awt.Color;
-import java.awt.Panel;
 import javax.swing.JColorChooser;
 import javax.swing.JTextPane;
 import javax.swing.text.StyleConstants;
@@ -17,42 +17,32 @@ import javax.swing.text.StyleConstants;
  * @author Esteb
  */
 public class ChangeForeground implements ICommand{
-    private StyleVersion style;
+
     private Editor editor;
-    public ChangeForeground(StyleVersion style ) {
-        this.style = style;
-    }
-
-    public ChangeForeground(StyleVersion style, Editor editor) {
-        this.style = style;
+    public ChangeForeground( Editor editor) {
         this.editor = editor;
     }
 
-    public ChangeForeground(Editor editor) {
-        this.editor = editor;
-    }
-    
     
     @Override
     public boolean execute() {
         try{
-            editor.getCaretaker().add(style.save());
-            StyleConstants.setForeground(style.getStyle(), 
-                    JColorChooser.showDialog(editor, "Select color", Color.yellow)
-            );
-            JTextPane pane = editor.getjTextPane();
-            style.getDoc().setCharacterAttributes(pane.getSelectionStart(), 
-                    pane.getSelectionEnd()- pane.getSelectionStart(),pane.getStyle("newstyle"), true);
-            editor.getjButtonUndo().setEnabled(true);
-
-            return true;
-        }catch (Exception ex){
+            JTextPane pane = editor.getjTextPane(); //get pane
+            Editable editable = EditableVersion.getInstance().getEditable();  //get editable abtract file
+            editable.setText(pane.getText()); //to save text
+            editor.getCaretaker().add(EditableVersion.getInstance().record()); //record the currect features including text
             
-        }
+            StyleConstants.setForeground(editable.getStyle(), 
+                    JColorChooser.showDialog(editor, "Select color", Color.BLACK) //select color
+            );
+           
+            editable.getDoc().setCharacterAttributes(pane.getSelectionStart(), 
+                    pane.getSelectionEnd()-pane.getSelectionStart(),pane.getStyle(editable.getStyleName()), true);
+            editor.getjButtonUndo().setEnabled(true); //paint colors 
+            return true;
+        }catch (Exception ex){}
         return false;
     }    
 
-    public void setStyle(StyleVersion style) {
-        this.style = style;
-    }
+ 
 }

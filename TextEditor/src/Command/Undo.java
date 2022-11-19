@@ -5,6 +5,7 @@
 package Command;
 
 import GUI.Editor;
+import Memento.EditableVersion;
 import Memento.StyleMemento;
 import Memento.SylesCaretaker;
 
@@ -28,8 +29,8 @@ public class Undo implements ICommand{
         SylesCaretaker caretaker = editor.getCaretaker();
         StyleMemento memento = caretaker.getPrevious();
         if(memento!=null){
-            editor.getStyleversion().restore(memento);
-            editor.getjTextPane().setDocument(editor.getStyleversion().getDoc());
+            EditableVersion.getInstance().restore(memento);
+            editor.getjTextPane().setDocument(EditableVersion.getInstance().getEditable().getDoc());
             editor.getjTextPane().updateUI();
             return true;
         }

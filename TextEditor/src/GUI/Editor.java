@@ -11,7 +11,8 @@ import Command.Redo;
 import Command.Save;
 import Command.SaveAs;
 import Command.Undo;
-import Memento.StyleVersion;
+import FilesType.Editable;
+import Memento.EditableVersion;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -49,8 +50,7 @@ public class Editor extends javax.swing.JFrame {
      */
 
     private CommandManager commandManager;
-    private StyleVersion styleversion;
-    private SylesCaretaker caretaker;
+    private SylesCaretaker caretaker = new SylesCaretaker();
     public Editor() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -58,24 +58,28 @@ public class Editor extends javax.swing.JFrame {
         ICommand command = commandManager.getCommand(Commands.CHANGE_THEME);
         ((ChangeColorTheme) command).setColorTheme(Settings.DEFAULT_THEME);
         command.execute();
-        styleversion = new StyleVersion();
-        styleversion.setDoc(jTextPane.getStyledDocument());
-        styleversion.setStyle(jTextPane.addStyle("newstyle", null));
-        caretaker = new SylesCaretaker();
-        this.jButtonUndo.setEnabled(false);
-        this.jButtonRedo.setEnabled(false);
+        setUpEditor();
+
     }
     private void setupCommands(){
         commandManager = new CommandManager();
         commandManager.registCommand(Commands.UNDO, new Undo(this));
         commandManager.registCommand(Commands.REDO, new Redo(this));
-        commandManager.registCommand(Commands.SAVE, new Save(this));
-        commandManager.registCommand(Commands.SAVE_AS, new SaveAs(this));
+        commandManager.registCommand(Commands.SAVE, new Save());
+        commandManager.registCommand(Commands.SAVE_AS, new SaveAs());
         commandManager.registCommand(Commands.OPEN, new Open(this));
         commandManager.registCommand(Commands.CHANGE_THEME, new ChangeColorTheme(this));
         commandManager.registCommand(Commands.CHANGE_FOREGROUND, new ChangeForeground(this));
         commandManager.registCommand(Commands.CHANGE_BACKGROUND, new ChangeBackground(this));
         
+    }
+    private void setUpEditor(){
+        EditableVersion.getInstance(); //to get the first instance
+        EditableVersion.getInstance().getEditable().setDoc(jTextPane.getStyledDocument());
+        String styleName = EditableVersion.getInstance().getEditable().getStyleName();
+        EditableVersion.getInstance().getEditable().setStyle(jTextPane.addStyle(styleName, null));
+        this.jButtonUndo.setEnabled(false);
+        this.jButtonRedo.setEnabled(false);
     }
     
   
@@ -102,6 +106,9 @@ public class Editor extends javax.swing.JFrame {
         button.setIcon(icon);
         button.repaint();
     }
+
+
+    
     
     
 
@@ -132,6 +139,7 @@ public class Editor extends javax.swing.JFrame {
         jToggleButtonTheme = new javax.swing.JToggleButton();
         jMenuBar = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -258,6 +266,15 @@ public class Editor extends javax.swing.JFrame {
         );
 
         jMenuFile.setText("File");
+
+        jMenuItem1.setText("SaveAs");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenuFile.add(jMenuItem1);
+
         jMenuBar.add(jMenuFile);
 
         setJMenuBar(jMenuBar);
@@ -295,37 +312,56 @@ public class Editor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonOpenActionPerformed
 
     private void jButtonForegroundColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonForegroundColorActionPerformed
-        
+        EditableVersion.getInstance().getEditable().setText(jTextPane.getText());
         ChangeForeground command = (ChangeForeground)commandManager.getCommand(Commands.CHANGE_FOREGROUND);
-        command.setStyle(styleversion);
         command.execute();
     }//GEN-LAST:event_jButtonForegroundColorActionPerformed
 
     private void jButtonHightLightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHightLightActionPerformed
+        EditableVersion.getInstance().getEditable().setText(jTextPane.getText());
         ChangeBackground command = (ChangeBackground)commandManager.getCommand(Commands.CHANGE_BACKGROUND);
-        command.setStyle(styleversion);
         command.execute();
     }//GEN-LAST:event_jButtonHightLightActionPerformed
 
     private void jButtonUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUndoActionPerformed
-
+        
         commandManager.getCommand(Commands.UNDO).execute();
     }//GEN-LAST:event_jButtonUndoActionPerformed
 
     private void jButtonRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRedoActionPerformed
-       commandManager.getCommand(Commands.REDO).execute();
+        commandManager.getCommand(Commands.REDO).execute();
     }//GEN-LAST:event_jButtonRedoActionPerformed
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
-        if (commandManager.getCommand(Commands.SAVE).execute())
-            JOptionPane.showMessageDialog(null, "Archivo guardado exitosamente");  
-        else
-            JOptionPane.showMessageDialog(null, "El archivo no fue guardado");
+        EditableVersion.getInstance().getEditable().setText(jTextPane.getText());
+        String route = EditableVersion.getInstance().getFile().getRoute();
+        if(!route.isBlank()){
+            Save command = (Save)commandManager.getCommand(Commands.SAVE);
+            command.setFileToSave(EditableVersion.getInstance().getFile());
+            command.execute();
+        }else{
+            if(commandManager.getCommand(Commands.SAVE_AS).execute())          
+                JOptionPane.showMessageDialog(null, "Archivo guardado exitosamente");  
+            else
+                JOptionPane.showMessageDialog(null, "El archivo no fue guardado");
+        }
+    
+ 
+        
     }//GEN-LAST:event_jButtonSaveActionPerformed
-
     private void jTextFieldNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNameActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        EditableVersion.getInstance().getEditable().setText(jTextPane.getText());
+
+        if(commandManager.getCommand(Commands.SAVE_AS).execute()){        
+            JOptionPane.showMessageDialog(null, "Archivo guardado exitosamente");  
+            jTextFieldName.setText(EditableVersion.getInstance().getFile().getRoute());
+        }else
+            JOptionPane.showMessageDialog(null, "El archivo no fue guardado");
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -361,6 +397,7 @@ public class Editor extends javax.swing.JFrame {
     private javax.swing.JButton jButtonUndo;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenu jMenuFile;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanelTextPaneContainer;
     private javax.swing.JPanel jPanelToolbarContainr;
     private javax.swing.JScrollPane jScrollPaneText;
@@ -430,9 +467,6 @@ public class Editor extends javax.swing.JFrame {
         return jPanelTextPaneContainer;
     }
 
-    public StyleVersion getStyleversion() {
-        return styleversion;
-    }
 
     public SylesCaretaker getCaretaker() {
         return caretaker;

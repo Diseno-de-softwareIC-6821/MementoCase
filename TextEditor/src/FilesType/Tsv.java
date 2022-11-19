@@ -10,13 +10,8 @@ package FilesType;
  */
 public class Tsv extends AFile{
 
-    public Tsv() {
+    Tsv(FileType type, String extension, String description) {
+        super(type, extension, description);
     }
 
-        
-    @Override
-    public void save() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
 }

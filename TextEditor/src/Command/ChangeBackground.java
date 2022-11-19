@@ -4,8 +4,10 @@
  */
 package Command;
 
+import FilesType.Editable;
 import GUI.Editor;
-import Memento.StyleVersion;
+import Memento.EditableVersion;
+
 import java.awt.Color;
 import java.awt.HeadlessException;
 import javax.swing.JColorChooser;
@@ -17,31 +19,23 @@ import javax.swing.text.StyleConstants;
  * @author Esteb
  */
 public class ChangeBackground implements ICommand{
-    private StyleVersion style;
     private Editor editor;
-    public ChangeBackground(StyleVersion style ) {
-        this.style = style;
-    }
-
-    public ChangeBackground(StyleVersion style, Editor editor) {
-        this.style = style;
-        this.editor = editor;
-    }
-
     public ChangeBackground(Editor editor) {
         this.editor = editor;
     }
-    
-    
-    @Override
+
+        @Override
     public boolean execute() {
         try{
-            editor.getCaretaker().add(style.save());
-            StyleConstants.setBackground(style.getStyle(), 
+            JTextPane pane = editor.getjTextPane(); //get pane
+            Editable editable = EditableVersion.getInstance().getEditable();  //get editable abtract file
+            editable.setText(pane.getText()); //to save text
+            editor.getCaretaker().add(EditableVersion.getInstance().record()); //
+            
+            StyleConstants.setBackground(editable.getStyle(), 
                     JColorChooser.showDialog(editor, "Select color", Color.white)
             );
-            JTextPane pane = editor.getjTextPane();
-            style.getDoc().setCharacterAttributes(pane.getSelectionStart(), 
+            editable.getDoc().setCharacterAttributes(pane.getSelectionStart(), 
                     pane.getSelectionEnd()- pane.getSelectionStart(),pane.getStyle("newstyle"), true);
             
             editor.getjButtonUndo().setEnabled(editor.getCaretaker().havePrevious());
@@ -50,9 +44,5 @@ public class ChangeBackground implements ICommand{
             
         }
         return false;
-    }    
-
-    public void setStyle(StyleVersion style) {
-        this.style = style;
-    }
+    } 
 }

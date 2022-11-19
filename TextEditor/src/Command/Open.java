@@ -4,8 +4,11 @@
  */
 package Command;
 
+import FilesType.Editable;
 import FilesType.FileFactory;
+import FilesType.FileType;
 import GUI.Editor;
+import Memento.EditableVersion;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -26,31 +29,31 @@ public class Open implements ICommand{
     @Override
     public boolean execute() {
         JFileChooser fc = new JFileChooser();
-        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos",
-                FileFactory.TXT_EXTENTION ,
-                FileFactory.TXTTAB_EXTENTION,
-                FileFactory.JSON_EXTENSION);
+        fc.addChoosableFileFilter(FileFactory.create(FileType.TXT));
+        fc.addChoosableFileFilter(FileFactory.create(FileType.TSV));
+        fc.addChoosableFileFilter(FileFactory.create(FileType.JSON));
         int selection = fc.showOpenDialog(null);
         if (selection == JFileChooser.APPROVE_OPTION) {
-            //método para leer el archivo y mostrarlo en el textArea
-            File fichero = fc.getSelectedFile();
+            //méFile fichero = fc.getSelectedFile();todo para leer el archivo y mostrarlo en el textArea
+            File fichero = fc.getSelectedFile(); 
             String ruta = fichero.getAbsolutePath();
-            if(ruta.endsWith(FileFactory.JSON_EXTENSION) || ruta.endsWith(FileFactory.TXT_EXTENTION) || ruta.endsWith(FileFactory.TXTTAB_EXTENTION)){
-                System.out.println("La ruta del archivo seleccionado ha sido obtenida exitosamente");
-                try(FileReader fr = new FileReader(fichero)){
-                    String cadena = "";
-                    int valor = fr.read();
-                    while(valor != -1){
-                        cadena = cadena + (char)valor;
-                        valor = fr.read();
-                    }
-                   this.editor.getjTextFieldName().setText(ruta);
-                   this.editor.getjTextPane().setText(cadena);
-                    return true;
-                }catch(IOException ex){
-                    System.out.println("Error al leer el archivo");
+            EditableVersion.getInstance().setEditable((Editable) FileFactory.create(FileType.EDITABLE));
+            EditableVersion.getInstance().getFile().setRoute(ruta);
+            System.out.println("La ruta del archivo seleccionado ha sido obtenida exitosamente");
+            try(FileReader fr = new FileReader(fichero)){
+                String cadena = "";
+                int valor = fr.read();
+                while(valor != -1){
+                    cadena = cadena + (char)valor;
+                    valor = fr.read();
                 }
+               this.editor.getjTextFieldName().setText(ruta);
+               this.editor.getjTextPane().setText(cadena);
+                return true;
+            }catch(IOException ex){
+                System.out.println("Error al leer el archivo");
             }
+            
         }
         
         return false;

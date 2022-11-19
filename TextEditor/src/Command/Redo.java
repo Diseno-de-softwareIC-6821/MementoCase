@@ -5,6 +5,7 @@
 package Command;
 
 import GUI.Editor;
+import Memento.EditableVersion;
 import Memento.StyleMemento;
 import Memento.SylesCaretaker;
 
@@ -25,12 +26,11 @@ public class Redo implements ICommand{
         SylesCaretaker caretaker = editor.getCaretaker();
         StyleMemento memento = caretaker.getNext();
         if(memento!=null){
-            editor.getStyleversion().restore(memento);     
+            EditableVersion.getInstance().restore(memento);  
+            editor.getjButtonUndo().setEnabled(caretaker.havePrevious());
+            editor.getjButtonRedo().setEnabled(caretaker.hasNext());
             return true;
         }
-        editor.getjButtonUndo().setEnabled(caretaker.havePrevious());
-        editor.getjButtonRedo().setEnabled(caretaker.hasNext());
-
         return false;
     }
     

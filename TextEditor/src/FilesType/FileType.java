@@ -9,5 +9,5 @@ package FilesType;
  * @author Esteb
  */
 public enum FileType {
-    TXT, JSON, TSV
+    TXT, JSON, TSV, EDITABLE, NULL
 }

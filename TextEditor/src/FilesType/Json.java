@@ -4,20 +4,16 @@
  */
 package FilesType;
 
+import java.io.File;
+
 /**
  *
  * @author Esteb
  */
 public class Json extends AFile{
 
-    public Json() {
+    Json(FileType type, String extension, String description) {
+        super(type, extension, description);
     }
-    
-    
-    
-    @Override
-    public void save() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
+
 }
