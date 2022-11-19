@@ -31,9 +31,10 @@ public class ChangeBackground implements ICommand{
             Editable editable = EditableVersion.getInstance().getEditable();  //get editable abtract file
             editable.setText(pane.getText()); //to save text
             editor.getCaretaker().add(EditableVersion.getInstance().record()); //
-            
+            Color color = JColorChooser.showDialog(editor, "Select background for text", Color.white);
+            System.out.println(color.getAlpha());
             StyleConstants.setBackground(editable.getStyle(), 
-                    JColorChooser.showDialog(editor, "Select color", Color.white)
+                   color
             );
             editable.getDoc().setCharacterAttributes(pane.getSelectionStart(), 
                     pane.getSelectionEnd()- pane.getSelectionStart(),EditableVersion.getInstance().getEditable().getStyle(), true);

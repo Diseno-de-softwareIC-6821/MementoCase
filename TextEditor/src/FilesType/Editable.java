@@ -51,6 +51,10 @@ public class Editable extends AFile implements Serializable{
         return styleName;
     }
     
+    public void changeTextBackGround(int start, int end){
+        
+    
+    }
     
     
     
